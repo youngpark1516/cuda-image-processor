@@ -1,13 +1,10 @@
 # CUDA Image Processor
 
 A modular CUDA-based image processing toolkit implementing GPU-accelerated filters such as **grayscale**, **box blur**, and **Sobel**.  
-Built with a clean multi-file structure for scalability and clarity.
 
 ---
 
 ## Overview
-
-This project demonstrates how to structure a modern CUDA C++ project, using separate source files for each image operation and a centralized Makefile for easy compilation.
 
 ### Implemented Features
 - **Grayscale conversion**
@@ -37,7 +34,7 @@ cuda-image-processor/
 │   └── main.cu
 │
 ├── Makefile
-├── samples             # Example input/output images
+├── examples             # Example input/output images
 └── bin/
     └── imgproc         # Final executable
 ```
@@ -72,7 +69,7 @@ Available modes:
 
 Example:
 ```bash
-./bin/imgproc samples/input.ppm samples/out_sobel.ppm sobel
+./bin/imgproc examples/reze.ppm examples/out_sobel.ppm sobel
 ```
 
 > Input images must be binary PPM (P6) format, 8-bit RGB.
