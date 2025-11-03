@@ -1,31 +1,94 @@
 # CUDA Image Processor
 
-A minimal GPU-accelerated **image processor** written in CUDA.  
-It performs common 2D filters — **grayscale**, **box blur**, and **Sobel edge detection** — directly on the GPU using parallel kernels.
+A modular CUDA-based image processing toolkit implementing GPU-accelerated filters such as **grayscale**, **box blur**, and **Sobel**.  
+Built with a clean multi-file structure for scalability and clarity.
 
 ---
 
-## Features
+## Overview
 
-- **PPM image input/output** (simple, dependency-free)
-- **3 CUDA filters**:
-  - `gray` – converts RGB to grayscale  
-  - `boxblur` – applies a 3×3 blur  
-  - `sobel` – performs edge detection using Sobel operators
-- Works entirely on the GPU  
-- Fully self-contained (no OpenCV or external libs required)
-- Clean and modular C++/CUDA implementation
+This project demonstrates how to structure a modern CUDA C++ project, using separate source files for each image operation and a centralized Makefile for easy compilation.
+
+### Implemented Features
+- **Grayscale conversion**
+- **Box blur** (3×3)
+- **Sobel**
+
+Each kernel runs entirely on the GPU using `nvcc` and minimal host-device transfers for efficiency.
 
 ---
 
-## Build
+## Project Structure
 
-### Requirements
-- CUDA Toolkit ≥ 12.0  
-- NVIDIA GPU (e.g., RTX 20XX, 30XX, etc.)
+```
+cuda-image-processor/
+├── include/
+│   ├── common.hpp      # CUDA error macro
+│   ├── image_io.hpp    # PPM read & write
+│   ├── gray.hpp        # Grayscale kernel
+│   ├── boxblur.hpp     # Box blur kernel
+│   └── sobel.hpp       # Sobel edge kernel
+│
+├── src/
+│   ├── image_io.cpp
+│   ├── gray.cu
+│   ├── boxblur.cu
+│   ├── sobel.cu
+│   └── main.cu
+│
+├── Makefile
+├── samples             # Example input/output images
+└── bin/
+    └── imgproc         # Final executable
+```
 
-### Compile
+---
+
+## Build Instructions
 
 ```bash
-nvcc -O3 -arch=sm_75 src/imgproc.cu -o imgproc
+make
+```
 
+This will compile all `.cu` and `.cpp` files into `bin/imgproc`.
+
+If `nvcc` isn’t found, run:
+```bash
+export PATH=/usr/local/cuda/bin:$PATH
+```
+
+---
+
+## Usage
+
+```bash
+./bin/imgproc input.ppm output.ppm <mode>
+```
+
+Available modes:
+- `gray` — Convert image to grayscale  
+- `boxblur` — Apply 3×3 box blur (on grayscale)  
+- `sobel` — Apply Sobel edge detection (on grayscale)
+
+Example:
+```bash
+./bin/imgproc samples/input.ppm samples/out_sobel.ppm sobel
+```
+
+> Input images must be binary PPM (P6) format, 8-bit RGB.
+
+---
+
+## Future Work
+
+- Add Gaussian blur (5×5 separable convolution)  
+- Extend support for PNG/JPEG via OpenCV (while keeping CUDA backend)  
+- Add benchmarking utilities with CUDA events  
+
+---
+
+##  Author
+
+**Chanyoung Park**  
+UC San Diego · Data Science Major  
+GitHub: [youngpark1516](https://github.com/youngpark1516)
