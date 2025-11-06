@@ -69,7 +69,7 @@ Available modes:
 
 Example:
 ```bash
-./bin/imgproc examples/reze.ppm examples/out_sobel.ppm sobel
+./bin/imgproc examples/reze.ppm examples/reze_sobel.ppm sobel
 ```
 
 > Input images must be binary PPM (P6) format, 8-bit RGB.
