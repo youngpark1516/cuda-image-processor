@@ -27,6 +27,13 @@ $(BINDIR)/imgproc: $(OBJS)
 	mkdir -p $(BINDIR)
 	$(NVCC) $(OPT) $(ARCH) $(INCLUDES) -o $@ $(OBJS)
 
+$(SRCDIR)/benchmark.o: $(SRCDIR)/benchmark.cu
+	$(NVCC) $(OPT) $(ARCH) $(INCLUDES) -c $< -o $@
+
+benchmark: $(SRCDIR)/benchmark.o $(SRCDIR)/gray.o $(SRCDIR)/boxblur.o $(SRCDIR)/sobel.o $(SRCDIR)/image_io.o
+	mkdir -p $(BINDIR)
+	$(NVCC) $(OPT) $(ARCH) $(INCLUDES) -o $(BINDIR)/benchmark $^
+
 clean:
 	rm -f $(SRCDIR)/*.o
 	rm -rf $(BINDIR)
