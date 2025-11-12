@@ -88,7 +88,7 @@ Example:
 
 ---
 
-## Benchmarking (Optional)
+## Benchmarking
 
 Measure **CPU vs GPU performance** for each filter:
 
