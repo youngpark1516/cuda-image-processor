@@ -93,16 +93,16 @@ Example:
 Measure **CPU vs GPU performance** for each filter:
 
 ```bash
-./bin/benchmark examples/input.ppm 10
+./bin/benchmark examples/reze_original.ppm 10
 ```
 
 Output example:
 
 ```
-Input: 1920x1080, iters=10
-grayscale        CPU:  12.41 ms   GPU:  0.21 ms   Speedup:  59.07x
-boxblur(3x3)     CPU:  38.27 ms   GPU:  0.52 ms   Speedup:  73.63x
-sobel            CPU:  44.91 ms   GPU:  0.61 ms   Speedup:  73.37x
+Input: 296x462, iters=10
+grayscale         CPU:    0.302 ms   GPU:    0.008 ms   Speedup:  36.66x
+boxblur(3x3)      CPU:    0.855 ms   GPU:    0.016 ms   Speedup:  52.44x
+sobel             CPU:    1.793 ms   GPU:    0.017 ms   Speedup: 108.04x
 ```
 
 ---
