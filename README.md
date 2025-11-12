@@ -1,17 +1,18 @@
 # CUDA Image Processor
 
-A modular CUDA-based image processing toolkit implementing GPU-accelerated filters such as **grayscale**, **box blur**, and **Sobel**.  
+A **GPU-accelerated image processing toolkit** built from scratch with **CUDA and C++**.  
+Implements kernels for **grayscale conversion**, **box blur**, and **Sobel edge detection** using parallel computation.
 
 ---
 
 ## Overview
 
-### Implemented Features
-- **Grayscale conversion**
-- **Box blur** (3×3)
-- **Sobel**
-
-Each kernel runs entirely on the GPU using `nvcc` and minimal host-device transfers for efficiency.
+| Feature | Description |
+|----------|--------------|
+| **Grayscale** | Converts RGB to luminance using CUDA threads |
+| **Box Blur (3×3)** | Averages neighboring pixels in parallel |
+| **Sobel Edge Detection** | Computes image gradients with GPU-optimized Sobel filters |
+| **PPM I/O** | Lightweight binary PPM read/write (no OpenCV) |
 
 ---
 
@@ -20,36 +21,45 @@ Each kernel runs entirely on the GPU using `nvcc` and minimal host-device transf
 ```
 cuda-image-processor/
 ├── include/
-│   ├── common.hpp      # CUDA error macro
-│   ├── image_io.hpp    # PPM read & write
-│   ├── gray.hpp        # Grayscale kernel
-│   ├── boxblur.hpp     # Box blur kernel
-│   └── sobel.hpp       # Sobel edge kernel
+│   ├── common.hpp       # Error handling (CK macro)
+│   ├── image_io.hpp
+│   ├── gray.hpp
+│   ├── boxblur.hpp
+│   └── sobel.hpp
 │
 ├── src/
 │   ├── image_io.cpp
 │   ├── gray.cu
 │   ├── boxblur.cu
 │   ├── sobel.cu
-│   └── main.cu
+│   ├── main.cu
+│   └── benchmark.cu
 │
+├── examples/
 ├── Makefile
-├── examples             # Example input/output images
-└── bin/
-    └── imgproc         # Final executable
+└── README.md
 ```
 
 ---
 
 ## Build Instructions
 
+### Prerequisites
+- **CUDA Toolkit ≥ 12.0**
+- **NVIDIA GPU** (e.g., RTX 2080 Ti, 30XX, 40XX series)
+- Linux environment (tested on **Rocky 9**)
+
+### Build
+
 ```bash
 make
 ```
 
-This will compile all `.cu` and `.cpp` files into `bin/imgproc`.
+This produces:
+- `bin/imgproc` – main CUDA processor  
+- `bin/benchmark` – CPU vs GPU benchmarking utility  
 
-If `nvcc` isn’t found, run:
+If `nvcc` is not found:
 ```bash
 export PATH=/usr/local/cuda/bin:$PATH
 ```
@@ -58,34 +68,55 @@ export PATH=/usr/local/cuda/bin:$PATH
 
 ## Usage
 
+Apply any filter directly:
+
 ```bash
 ./bin/imgproc input.ppm output.ppm <mode>
 ```
 
-Available modes:
-- `gray` — Convert image to grayscale  
-- `boxblur` — Apply 3×3 box blur (on grayscale)  
-- `sobel` — Apply Sobel edge detection (on grayscale)
+**Modes**
+- `gray` — grayscale conversion  
+- `boxblur` — 3×3 box blur  
+- `sobel` — Sobel edge detection  
 
 Example:
 ```bash
 ./bin/imgproc examples/reze.ppm examples/reze_sobel.ppm sobel
 ```
 
-> Input images must be binary PPM (P6) format, 8-bit RGB.
+> Supports binary **PPM (P6)** format, 8-bit RGB.
+
+---
+
+## Benchmarking (Optional)
+
+Measure **CPU vs GPU performance** for each filter:
+
+```bash
+./bin/benchmark examples/input.ppm 10
+```
+
+Output example:
+
+```
+Input: 1920x1080, iters=10
+grayscale        CPU:  12.41 ms   GPU:  0.21 ms   Speedup:  59.07x
+boxblur(3x3)     CPU:  38.27 ms   GPU:  0.52 ms   Speedup:  73.63x
+sobel            CPU:  44.91 ms   GPU:  0.61 ms   Speedup:  73.37x
+```
 
 ---
 
 ## Future Work
 
-- Add Gaussian blur (5×5 separable convolution)  
-- Extend support for PNG/JPEG via OpenCV (while keeping CUDA backend)  
-- Add benchmarking utilities with CUDA events  
+- Add **Gaussian blur (5×5)** with separable convolution  
+- Extend I/O to **PNG/JPEG** via OpenCV backend  
+- Integrate performance plots and visual comparisons  
 
 ---
 
-##  Author
+## Author
 
 **Chanyoung Park**  
-UC San Diego · Data Science Major  
-GitHub: [youngpark1516](https://github.com/youngpark1516)
+ UC San Diego — Data Science Major  
+ [GitHub: youngpark1516](https://github.com/youngpark1516)
