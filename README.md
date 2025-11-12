@@ -1,7 +1,7 @@
 # CUDA Image Processor
 
 A minimal GPU-accelerated **image processor** written in CUDA.  
-It performs common 2D filters — **grayscale**, **box blur**, and **Sobel edge detection** — directly on the GPU using parallel kernels.
+It performs common 2D filters - **grayscale**, **box blur**, and **Sobel edge detection** - directly on the GPU using parallel kernels.
 
 ---
 
@@ -9,9 +9,9 @@ It performs common 2D filters — **grayscale**, **box blur**, and **Sobel edge 
 
 - **PPM image input/output** (simple, dependency-free)  
 - **3 CUDA filters**:
-  - `gray` – converts RGB to grayscale  
-  - `boxblur` – applies a 3×3 blur  
-  - `sobel` – performs edge detection using Sobel operators  
+  - `gray` - converts RGB to grayscale  
+  - `boxblur` - applies a 3×3 blur  
+  - `sobel` - performs edge detection using Sobel operators  
 - Works entirely on the GPU  
 - Fully self-contained (no OpenCV or external libs required)  
 - Clean and modular C++/CUDA implementation
@@ -30,8 +30,8 @@ make
 ```
 
 This produces:
-- `bin/imgproc` – the main image processor  
-- `bin/benchmark` – CPU vs GPU benchmarking tool  
+- `bin/imgproc` - the main image processor  
+- `bin/benchmark` - CPU vs GPU benchmarking tool  
 
 ---
 
