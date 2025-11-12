@@ -1,56 +1,103 @@
 # CUDA Image Processor
 
-A minimal GPU-accelerated **image processor** written in CUDA.  
-It performs common 2D filters - **grayscale**, **box blur**, and **Sobel edge detection** - directly on the GPU using parallel kernels.
+A **GPU-accelerated image processing toolkit** built from scratch with **CUDA and C++**.  
+Implements kernels for **grayscale conversion**, **box blur**, and **Sobel edge detection** using parallel computation.
 
 ---
 
 ## Features
 
-- **PPM image input/output** (simple, dependency-free)  
-- **3 CUDA filters**:
-  - `gray` - converts RGB to grayscale  
-  - `boxblur` - applies a 3×3 blur  
-  - `sobel` - performs edge detection using Sobel operators  
-- Works entirely on the GPU  
-- Fully self-contained (no OpenCV or external libs required)  
-- Clean and modular C++/CUDA implementation
+| Feature | Description |
+|----------|--------------|
+| **Grayscale** | Converts RGB to luminance using CUDA threads |
+| **Box Blur (3×3)** | Averages neighboring pixels in parallel |
+| **Sobel Edge Detection** | Computes image gradients with GPU-optimized Sobel filters |
+| **PPM I/O** | Lightweight binary PPM read/write (no OpenCV) |
 
 ---
 
-## Build
+## Project Structure
 
-### Requirements
-- CUDA Toolkit ≥ 12.0  
-- NVIDIA GPU (e.g., RTX 20XX, 30XX, etc.)
+```
+cuda-image-processor/
+├── include/
+│   ├── common.hpp       # Error handling (CK macro)
+│   ├── image_io.hpp
+│   ├── gray.hpp
+│   ├── boxblur.hpp
+│   └── sobel.hpp
+│
+├── src/
+│   ├── image_io.cpp
+│   ├── gray.cu
+│   ├── boxblur.cu
+│   ├── sobel.cu
+│   ├── main.cu
+│   └── benchmark.cu
+│
+├── examples/
+├── Makefile
+└── README.md
+```
 
-### Compile
+---
+
+## Build Instructions
+
+### Prerequisites
+- **CUDA Toolkit ≥ 12.0**
+- **NVIDIA GPU** (e.g., RTX 2080 Ti, 30XX, 40XX series)
+- Linux environment (tested on **Rocky 9**)
+
+### Build
+
 ```bash
 make
 ```
 
 This produces:
-- `bin/imgproc` - the main image processor  
-- `bin/benchmark` - CPU vs GPU benchmarking tool  
+- `bin/imgproc` – main CUDA processor  
+- `bin/benchmark` – CPU vs GPU benchmarking utility  
+
+If `nvcc` is not found:
+```bash
+export PATH=/usr/local/cuda/bin:$PATH
+```
 
 ---
 
-## Benchmarking
+## Usage
 
-A custom benchmarking tool is included to compare **CPU vs GPU performance**:
+Apply any filter directly:
 
-- Grayscale  
-- Box blur (3×3)  
-- Sobel edge detection  
-
-### Run benchmark
 ```bash
-bin/benchmark examples/input.ppm 10
+./bin/imgproc input.ppm output.ppm <mode>
 ```
 
-Where `10` is the number of iterations averaged.
+**Modes**
+- `gray` — grayscale conversion  
+- `boxblur` — 3×3 box blur  
+- `sobel` — Sobel edge detection  
 
-### Sample output
+Example:
+```bash
+./bin/imgproc examples/reze.ppm examples/reze_sobel.ppm sobel
+```
+
+> Supports binary **PPM (P6)** format, 8-bit RGB.
+
+---
+
+## Benchmarking (Optional)
+
+Measure **CPU vs GPU performance** for each filter:
+
+```bash
+./bin/benchmark examples/input.ppm 10
+```
+
+Output example:
+
 ```
 Input: 1920x1080, iters=10
 grayscale        CPU:  12.41 ms   GPU:  0.21 ms   Speedup:  59.07x
@@ -60,41 +107,16 @@ sobel            CPU:  44.91 ms   GPU:  0.61 ms   Speedup:  73.37x
 
 ---
 
-## Usage
+## Future Work
 
-### Apply a filter
-```bash
-bin/imgproc input.ppm output.ppm gray
-bin/imgproc input.ppm output.ppm boxblur
-bin/imgproc input.ppm output.ppm sobel
-```
+- Add **Gaussian blur (5×5)** with separable convolution  
+- Extend I/O to **PNG/JPEG** via OpenCV backend  
+- Integrate performance plots and visual comparisons  
 
 ---
 
-## Repository Structure
-```
-image-processor/
-├── src/
-│   ├── gray.cu
-│   ├── boxblur.cu
-│   ├── sobel.cu
-│   ├── main.cu
-│   ├── benchmark.cu
-│   └── image_io.cpp
-├── include/
-│   ├── gray.hpp
-│   ├── boxblur.hpp
-│   ├── sobel.hpp
-│   ├── common.hpp
-│   └── image_io.hpp
-├── examples/
-│   └── example.ppm
-├── bin/
-├── Makefile
-└── README.md
-```
+## Author
 
----
-
-## License
-MIT License
+**Chanyoung Park**  
+ UC San Diego — Data Science Major  
+ [GitHub: youngpark1516](https://github.com/youngpark1516)
