@@ -5,7 +5,7 @@ Implements kernels for **grayscale conversion**, **box blur**, and **Sobel edge 
 
 ---
 
-## Features
+## Overview
 
 | Feature | Description |
 |----------|--------------|
