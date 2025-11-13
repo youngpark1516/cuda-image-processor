@@ -1,0 +1,4 @@
+op,cpu_ms,gpu_ms,speedup,width,height,iters
+grayscale,0.278,0.008,33.98,296,462,10
+boxblur(3x3),0.831,0.017,48.86,296,462,10
+sobel,1.736,0.016,106.59,296,462,10
